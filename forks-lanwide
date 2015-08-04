@@ -15,9 +15,8 @@ do_config()  {
    touch -d NOW-2min "$state.ref"				# reference time file: timestamp 2 minutes ago
    [[ $state -ot $state.ref ]] &&				# cached status file needs renewal if older than that
    signal @munin status > $state				# renew cached status when older than reference file 
-#graph_title multihost fork rate (https://github.com/bushmills/serafena/wiki/munin%20plugin%20forks)
 cat << EOF
-graph_title https://github.com/bushmills/serafena/wiki/munin%20plugin%20forks
+graph_title https://github.com/Bushmills/-multi-host-munin-plugins/blob/master/forks-lanwide
 graph_vlabel forks per second
 graph_category multihost
 graph_args --base 1000 -l 0
