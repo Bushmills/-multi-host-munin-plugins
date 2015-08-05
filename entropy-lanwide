@@ -16,7 +16,7 @@ do_config()  {
    [[ $state -ot $state.ref ]] &&				# cached status file needs renewal if older than that
    signal @munin status > $state				# renew cached status when older than reference file 
 cat << EOF
-graph_title https://github.com/Bushmills/-multi-host-munin-plugins/blob/master/entropy-lanwide
+graph_title https://github.com/Bushmills/-multi-host-munin-plugins
 graph_vlabel entropy bytes
 graph_category multihost
 graph_args --base 1000 -l 0
