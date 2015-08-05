@@ -31,4 +31,3 @@ do_fetch()  {
 }
 
 do_${1:-fetch}
-exit 0
