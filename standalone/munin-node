@@ -1,0 +1,172 @@
+#!/bin/bash
+
+
+PATH="/misc/bin:$PATH"
+statedir="/tmp/munin"
+mkdir -p $statedir
+state="$statedir/lanwide.status"                                # cache status output in this file
+
+config()  {
+   touch -d NOW-2min "$state.ref"                               # reference time file: timestamp 2 minutes ago
+   [[ $state -ot $state.ref ]] &&
+   signal @munin status > $state                                # acquire from hosts if renew cached status is older than reference file 
+
+cat << EOF
+graph_title https://github.com/Bushmills/-multi-host-munin-plugins
+graph_vlabel $1
+graph_category $plugin
+graph_args --base 1000 -l 0
+graph_scale no
+EOF
+}
+
+### ---------- forks ----------
+config_forks()  {
+   config "forks per second"
+   awk '$2 == "forks" {
+      print $1 ".label", $1
+      print $1 ".draw AREASTACK"
+      print $1 ".type DERIVE"
+   }' $state
+}
+
+fetch_forks()  {
+   awk '$2 == "forks" {
+      print $1 ".value", $4
+   }' $state
+}
+
+
+### ---------- entropy ----------
+config_entropy()  {
+   config "entropy"
+   awk '$2 == "entropy" {
+      print $1 ".label", $1
+      print $1 ".draw AREASTACK"
+   }' $state
+}
+
+fetch_entropy()  {
+   awk '$2 == "entropy" {
+      print $1 ".value", $4
+   }' $state
+}
+
+
+### ---------- packages ----------
+config_packages()  {
+   config "installed packages"
+   awk '$2 == "packages" {
+      print $1 ".label", $1
+   }' $state
+}
+
+fetch_packages()  {
+   awk '$2 == "packages" {
+      print $1 ".value", $4
+   }' $state
+}
+
+
+### ---------- processes ----------
+config_processes()  {
+   config "processes"
+   awk '$2 == "processes" {
+      print $1 ".label", $1
+      print $1 ".draw AREASTACK"
+   }' $state
+}
+
+fetch_processes()  {
+   awk '$2 == "processes" {
+      print $1 ".value", $4
+   }' $state
+}
+
+
+### ---------- uptime ----------
+config_uptime()  {
+   config "uptime days"
+   awk '$2 == "uptime" {
+      print $1 ".label", $1   
+      print $1 ".cdef", $1 ",86400,/"
+   }' $state
+}
+
+fetch_uptime()  {
+   awk '$2 == "uptime" {
+      print $1 ".value", $4
+   }' $state   
+}
+
+
+### ---------- load ----------
+config_load()  {
+   config "load (15min)"
+   awk '$2 == "load" {
+      print $1 ".label", $1     
+      print $1 ".draw AREASTACK"
+   }' $state   
+}
+
+fetch_load()  {
+   awk '$2 == "load" {
+      print $1 ".value", $6
+   }' $state   
+}
+
+
+### ---------- memused ----------
+config_memused()  {
+   config "memory used"
+   awk '$2 == "memused" {
+      print $1 ".label", $1
+      print $1 ".draw AREASTACK"
+   }' $state
+}
+
+fetch_memused()  {
+   awk '$2 == "memused" {
+      print $1 ".value", $4
+   }' $state
+}
+
+
+### --------- plugin not found --------
+config_unknown()  { echo "# Unknown service"; }
+fetch_unknown()   { config_unknown; }
+
+
+
+### --------listen and reply to munin server queries --------
+do_list() {
+  plugins=$(sed -n 's/(.*//;s/^fetch_//p' $0)
+  echo $plugins
+}
+
+do_nodes() {
+  echo $HOSTNAME
+  echo "."
+}
+
+config_or_fetch()  {
+  plugin=$1
+  type -t ${cmd}_${plugin} > /dev/null || plugin=unknown
+  ${cmd}_${plugin}
+  echo "."
+}
+
+do_config() { config_or_fetch $1; }
+do_fetch()  { config_or_fetch $1; }
+do_quit()   { exit 0; }
+
+echo "# munin node at $HOSTNAME"
+while read cmd args; do
+  cmd="${cmd%[!A-Za-z0-9]}"			# strip trailing non-alphanum (such as ^M)
+  args="${args%[!A-Za-z0-9]}"                   # dito
+  if type -t do_$cmd > /dev/null; then
+     do_$cmd $args
+     continue
+  fi
+  echo "# Unknown command"
+done 
