@@ -1,16 +1,15 @@
 #!/bin/bash
 
-
 PATH="/misc/bin:$PATH"
 statedir="/tmp/munin"
 mkdir -p $statedir
 state="$statedir/lanwide.status"                                # cache status output in this file
 
-config()  {
-   touch -d NOW-2min "$state.ref"                               # reference time file: timestamp 2 minutes ago
-   [[ $state -ot $state.ref ]] &&
-   signal @munin status > $state                                # acquire from hosts if renew cached status is older than reference file 
+touch -d NOW-2min "$state.ref"                                  # reference time file: timestamp 2 minutes ago
+[[ $state -ot $state.ref ]] &&
+signal @munin status > $state                                   # acquire from hosts if renew cached status is older than reference file 
 
+config()  {
 cat << EOF
 graph_title https://github.com/Bushmills/-multi-host-munin-plugins
 graph_vlabel $1
@@ -36,7 +35,6 @@ fetch_forks()  {
    }' $state
 }
 
-
 ### ---------- entropy ----------
 config_entropy()  {
    config "entropy"
@@ -52,7 +50,6 @@ fetch_entropy()  {
    }' $state
 }
 
-
 ### ---------- packages ----------
 config_packages()  {
    config "installed packages"
@@ -66,7 +63,6 @@ fetch_packages()  {
       print $1 ".value", $4
    }' $state
 }
-
 
 ### ---------- processes ----------
 config_processes()  {
@@ -83,7 +79,6 @@ fetch_processes()  {
    }' $state
 }
 
-
 ### ---------- uptime ----------
 config_uptime()  {
    config "uptime days"
@@ -98,7 +93,6 @@ fetch_uptime()  {
       print $1 ".value", $4
    }' $state   
 }
-
 
 ### ---------- load ----------
 config_load()  {
@@ -115,7 +109,6 @@ fetch_load()  {
    }' $state   
 }
 
-
 ### ---------- memused ----------
 config_memused()  {
    config "memory used"
@@ -131,11 +124,9 @@ fetch_memused()  {
    }' $state
 }
 
-
 ### --------- plugin not found --------
 config_unknown()  { echo "# Unknown service"; }
 fetch_unknown()   { config_unknown; }
-
 
 
 ### --------listen and reply to munin server queries --------
