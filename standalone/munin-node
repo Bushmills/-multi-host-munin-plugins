@@ -154,9 +154,8 @@ do_quit()   { exit 0; }
 echo "# munin node at $HOSTNAME"
 while read cmd args; do
   cmd="${cmd//[!A-Za-z0-9._-]/}"		# strip all non-alphanum (such as trailing ^M)
-  args="${args//[!A-Za-z0-9._-]/}"              # dito
   type -t do_$cmd > /dev/null && {
-     do_$cmd $args
+     do_$cmd ${args//[!A-Za-z0-9._-]/}
      continue
   }
   echo "# Unknown command"
