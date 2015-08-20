@@ -4,7 +4,7 @@
 These make use of [serafena](https://github.com/Bushmills/serafena).
 
 There are two different versions of the same plugins.
-The set in munin-node is executed from conventional munin-node, as plugins.
+The set in munin-node is executed from regular munin-node, as plugins.
 You may want to use this version if the machine is running a munin node already,
 of if you're planning to set it up as one.
 
