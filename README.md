@@ -11,5 +11,7 @@ of if you're planning to set it up as one.
 The version in standalone is a bash written minimal munin node together with
 all those plugins in a single file. This minimal node is invoked from xinetd,
 the xinetd configuration file has been provided.
-This version can be used to serve lanwide munin information through serafena,
-without the need to install munin-node anywhere. A munin server is still required.
+
+Either version serves lanwide munin information, which is collected by sending
+request to the hosts through through serafena (https://github.com/Bushmills/serafena),
+Hosts reply to requests to service "status".
