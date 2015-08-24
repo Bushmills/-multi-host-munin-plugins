@@ -13,5 +13,5 @@ all those plugins in a single file. This minimal node is invoked from xinetd,
 the xinetd configuration file has been provided.
 
 Either version serves lanwide munin information, which is collected by sending
-request to the hosts through through serafena (https://github.com/Bushmills/serafena),
+request to the hosts through through [serafena](https://github.com/Bushmills/serafena),
 Hosts reply to requests to service "status".
