@@ -15,4 +15,7 @@ the xinetd configuration file has been provided.
 
 Either version serves lanwide munin information, which is collected by sending
 request to the hosts through through [serafena](https://github.com/Bushmills/serafena),
-Hosts reply to requests to service "status".
+Hosts reply to requests to service "status". None of the hosts need to be regular
+munin nodes, when using standalone version. For the plugin set for regular
+munin node, only the host running the plugins needs to be a regular munin node.
+
