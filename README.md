@@ -17,9 +17,8 @@ The version in [standalone](https://github.com/Bushmills/-multi-host-munin-plugi
 all those plugins in a single file. This minimal node is invoked from xinetd,
 the xinetd configuration file has been provided.
 
-Either version serves lanwide munin information, which is collected by sending
-request to the hosts through through [serafena](https://github.com/Bushmills/serafena),
-Hosts reply to requests to service "status". None of the hosts need to be regular
-munin nodes, when using standalone version. For the plugin set for regular
-munin node, only the host running the plugins needs to be a regular munin node.
-
+Either version serves lanwide munin information, which is collected by a single machine, by sending the
+status request to the monitored hosts through [serafena](https://github.com/Bushmills/serafena),
+None of the hosts need to be regular munin nodes, when using standalone version. For the
+plugin set for regular munin node, only the host queried by the munin server needs to be a
+regular munin node.
