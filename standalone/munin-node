@@ -5,9 +5,9 @@ statedir="/tmp/munin"
 mkdir -p $statedir
 state="$statedir/lanwide.status"                                # cache status output in this file
 
-touch -d NOW-2min "$state.ref"                                  # reference time file: timestamp 2 minutes ago
-[[ $state -ot $state.ref ]] &&
-signal @munin status > $state                                   # acquire from hosts if renew cached status is older than reference file 
+touch -d NOW-2min "$state.ref"                                  # reference time file: timestamp 2 minutes ago. use coreutils touch	
+[[ ! -f $state || $state -ot $state.ref ]] &&
+/usr/local/bin/signal @munin status > $state                    # acquire from hosts if renew cached status is older than reference file 
 
 config()  {
 cat << EOF
@@ -111,10 +111,11 @@ fetch_load()  {
 
 ### ---------- memused ----------
 config_memused()  {
-   config "memory used"
+   config "memory used (MiB)"
    awk '$2 == "memused" {
       print $1 ".label", $1
       print $1 ".draw AREASTACK"
+      print $1 ".cdef", $1 ",1048576,/"
    }' $state
 }
 
@@ -123,6 +124,23 @@ fetch_memused()  {
       print $1 ".value", $4
    }' $state
 }
+
+### ---------- diskfree ----------
+config_diskfree()  {
+   config "root device free GB"
+   awk '$2 == "diskfree" {
+      print $1 ".label", $1
+      print $1 ".draw AREASTACK"
+      print $1 ".cdef", $1 ",1048576,/"
+   }' $state
+}
+
+fetch_diskfree()  {
+   awk '$2 == "diskfree" {
+      print $1 ".value", $4
+   }' $state
+}
+
 
 ### --------- plugin not found --------
 config_unknown()  { echo "# Unknown service"; }
