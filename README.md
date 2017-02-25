@@ -2,7 +2,7 @@
 [Munin](https://github.com/munin-monitoring/munin) plugins for
 [single node multi host graphs](http://demo.munin-monitoring.org/vpn/multihost.vpn).
 These make use of [serafena](https://github.com/Bushmills/serafena), by signalling to receiving hosts execution of
-[service status](https://github.com/Bushmills/serafena/blob/master/signal.handler/service_status). Receiving hosts are gathered in a group by the name "munin", so they can all be addressed in a single comman: signal @munin status.
+[service status](https://github.com/Bushmills/serafena/blob/master/signal.handler/service_status). Receiving hosts are gathered in a group by the name "munin", so they can all be addressed in a single command: signal @munin status.
 As the output has been parse-friendlyly formatted, the netwide plugin becomes rather simple.
 
 An example of produced output is shown [here](http://demo.munin-monitoring.org/vpn/vpn/)
