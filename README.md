@@ -1,7 +1,8 @@
 # -multi-host-munin-plugins
 [Munin](https://github.com/munin-monitoring/munin) plugins for
 [single node multi host graphs](http://demo.munin-monitoring.org/vpn/multihost.vpn).
-These make use of [serafena](https://github.com/Bushmills/serafena).
+These make use of [serafena](https://github.com/Bushmills/serafena), by signalling to receiving hosts execution of
+[service status](https://github.com/Bushmills/serafena/blob/master/signal.handler/service_status). Receiving hosts are gathered in a group by the name "munin", so they can all be addressed in a single command.
 
 There are two different versions of the same plugins.
 The set in [munin-node](https://github.com/Bushmills/-multi-host-munin-plugins/tree/master/munin-node)
